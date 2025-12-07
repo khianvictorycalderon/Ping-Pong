@@ -1,0 +1,19 @@
+/* GENERAL PAGE STYLE */
+body {
+    margin: 0;
+    background: rgb(40, 40, 40);
+    overflow: hidden;
+    user-select: none;
+}
+
+h2, p {
+    padding: 0;
+    margin: 0.5rem;
+}
+
+/* CANVAS */
+#content {
+    width: 100vw;
+    height: 100vh;
+    display: block;
+}
