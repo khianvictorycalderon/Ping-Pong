@@ -72,6 +72,19 @@ h2, p {
     z-index: 100;
 }
 
+#info {
+    position: fixed;     
+    top: 25%;            
+    left: 50%;           
+    transform: translateX(-50%);
+    color: white;       
+    font-size: 1.5rem; 
+    font-family: Arial, sans-serif;
+    z-index: 200;        
+    text-align: center; 
+    width: 100%;
+}
+
 #control-left { background: rgba(40, 40, 40, 0.2); }
 #control-right { background: rgba(58, 58, 58, 0.2); }
 
