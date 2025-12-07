@@ -51,6 +51,10 @@ h2, p {
     transition: 0.3s;
 }
 
+#playBtn:hover {
+    background: rgb(0, 203, 0);
+}
+
 #control-left { background: rgba(40, 40, 40, 0.2); }
 #control-right { background: rgba(58, 58, 58, 0.2); }
 
