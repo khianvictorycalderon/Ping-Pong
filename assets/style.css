@@ -55,6 +55,16 @@ h2, p {
     background: rgb(0, 203, 0);
 }
 
+.control-wrapper {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+}
+
 #control-left { background: rgba(40, 40, 40, 0.2); }
 #control-right { background: rgba(58, 58, 58, 0.2); }
 
