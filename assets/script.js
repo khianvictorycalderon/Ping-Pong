@@ -1,13 +1,3 @@
-const botSpeed = 600;
-const playerSpeed = 600;
-
-let gameRunning = false;
-
-// BALL SPEED SETTINGS
-let ballSpeed = 50;
-const increaseRateBallSpeed = 50;
-const maxBallSpeed = 1000;
-
 // CANVAS SETUP
 const canvas = document.getElementById("content");
 const ctx = canvas.getContext("2d");
@@ -19,6 +9,51 @@ function resizeCanvas() {
 resizeCanvas();
 window.addEventListener("resize", resizeCanvas);
 
+// DEVICE DETECTION
+function getDeviceType() {
+    const w = window.innerWidth;
+    if (w <= 600) return "mobile";
+    if (w <= 1024) return "tablet";
+    return "desktop";
+}
+
+const device = getDeviceType();
+
+// PLAYER/BOT SPEED CONSTANTS
+const mobileSpeed = 400;
+const tabletSpeed = 500;
+const desktopSpeed = 600;
+
+const mobileBotSpeed = 320;
+const tabletBotSpeed = 480;
+const desktopBotSpeed = 600;
+
+// SPEED OBJECT
+const speed = {
+    player:
+        device === "mobile"
+            ? mobileSpeed
+            : device === "tablet"
+            ? tabletSpeed
+            : desktopSpeed,
+
+    bot:
+        device === "mobile"
+            ? mobileBotSpeed
+            : device === "tablet"
+            ? tabletBotSpeed
+            : desktopBotSpeed
+};
+
+// PADDLE SIZE
+let paddleWidth = device === "mobile" ? 100 : 140;
+let paddleHeight = 20;
+
+// BALL SPEED SETTINGS (scaled for mobile)
+let ballSpeed = device === "mobile" ? 30 : 50;
+const increaseRateBallSpeed = device === "mobile" ? 35 : 50;
+const maxBallSpeed = 900;
+
 // SCORE
 let playerScore = 0;
 let botScore = 0;
@@ -29,9 +64,6 @@ function displayScore() {
 }
 
 // PADDLES
-const paddleWidth = 140;
-const paddleHeight = 20;
-
 const player = {
     x: canvas.width / 2 - paddleWidth / 2,
     y: canvas.height - paddleHeight - 20,
@@ -44,7 +76,7 @@ const player = {
 const bot = {
     x: canvas.width / 2 - paddleWidth / 2,
     y: 20,
-    width: paddleWidth,
+    width: paddleWidth * (device === "mobile" ? 0.85 : 1),
     height: paddleHeight
 };
 
@@ -62,8 +94,8 @@ function resetBall() {
     ball.x = canvas.width / 2;
     ball.y = canvas.height / 2;
 
-    // Reset speed
-    ballSpeed = 1;
+    // Reset ball speed scaling
+    ballSpeed = device === "mobile" ? 30 : 50;
 
     const dirX = Math.random() > 0.5 ? 1 : -1;
     const dirY = Math.random() > 0.5 ? 1 : -1;
@@ -83,6 +115,7 @@ document.addEventListener("keyup", e => {
     if (e.key === "ArrowRight" || e.key === "d") player.moveRight = false;
 });
 
+// MOBILE BUTTONS
 const leftBtn = document.getElementById("control-left");
 const rightBtn = document.getElementById("control-right");
 
@@ -104,6 +137,7 @@ rightBtn.addEventListener("touchend", e => {
     player.moveRight = false;
 });
 
+let gameRunning = false;
 let lastTime = 0;
 
 // UPDATE GAME
@@ -111,20 +145,20 @@ function update(dt) {
     if (!gameRunning) return;
 
     // PLAYER MOVEMENT
-    if (player.moveLeft) player.x -= playerSpeed * dt;
-    if (player.moveRight) player.x += playerSpeed * dt;
+    if (player.moveLeft) player.x -= speed.player * dt;
+    if (player.moveRight) player.x += speed.player * dt;
     player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
 
     // BOT MOVEMENT
-    if (ball.x < bot.x + bot.width / 2) bot.x -= botSpeed * dt;
-    if (ball.x > bot.x + bot.width / 2) bot.x += botSpeed * dt;
+    if (ball.x < bot.x + bot.width / 2) bot.x -= speed.bot * dt;
+    if (ball.x > bot.x + bot.width / 2) bot.x += speed.bot * dt;
     bot.x = Math.max(0, Math.min(canvas.width - bot.width, bot.x));
 
     // BALL MOVEMENT
     ball.x += ball.vx * dt;
     ball.y += ball.vy * dt;
 
-    // Increase ball speed linearly, capped
+    // Increase ball speed
     ballSpeed += increaseRateBallSpeed * dt;
     ballSpeed = Math.min(ballSpeed, maxBallSpeed);
 
@@ -143,7 +177,7 @@ function update(dt) {
         ball.vx *= -1;
     }
 
-    // SCORE
+    // SCORE LOGIC
     if (ball.y - ball.radius < 0) {
         playerScore++;
         displayScore();
@@ -156,7 +190,7 @@ function update(dt) {
         resetBall();
     }
 
-    // COLLISION WITH PADDLES
+    // COLLISIONS WITH PADDLES
     function collide(p) {
         return (
             ball.x > p.x &&
