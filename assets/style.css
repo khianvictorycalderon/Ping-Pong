@@ -18,6 +18,21 @@ h2, p {
     display: block;
 }
 
+/* SCORE DISPLAY */
+#score {
+    position: fixed;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2rem;
+    color: white;
+    z-index: 100;
+    user-select: none;
+    font-family: Arial, sans-serif;
+    display: flex;
+    gap: 1rem;
+}
+
 #control-left { background: rgba(40, 40, 40, 0.2); }
 #control-right { background: rgba(58, 58, 58, 0.2); }
 
