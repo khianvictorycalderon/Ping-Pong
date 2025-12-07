@@ -33,6 +33,24 @@ h2, p {
     gap: 1rem;
 }
 
+/* PLAY BUTTON */
+#playBtn {
+    position: fixed;
+    top: 45%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 1rem 2rem;
+    font-size: 1.5rem;
+    background: green;
+    border: none;
+    color: white;
+    border-radius: 12px;
+    cursor: pointer;
+    z-index: 200;
+    font-family: Arial, sans-serif;
+    transition: 0.3s;
+}
+
 #control-left { background: rgba(40, 40, 40, 0.2); }
 #control-right { background: rgba(58, 58, 58, 0.2); }
 
